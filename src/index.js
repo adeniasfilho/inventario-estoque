@@ -1,55 +1,52 @@
-import express, { json } from "express";
+import express, {json} from "express";
 const app = express();
 app.use(json());
 
 let id = 2;
-/*let minimoEstoque = 5;
-let referenciasLojista = "Ponto Frio";
-let produto = "Televisão";
-let tipo = "oled";*/
-let unidadesAdquiridas;
-let saida ;
-let total = (unidadesAdquiridas - saida);
+let unidadesAdquiridas = 0;
+let saida = 0;
+let controle = (unidadesAdquiridas - saida);
 
-json = {
-    
-    id:1,
+id = json.id;
+let estoque = [json, id];
+const estoque_ativo = {
+    id: 1,
     minimoEstoque: 5,
     referenciasLojista: "Ponto Frio",
     produto: "Televisão",
     tipo: "oled",
     unidadesAdquiridas: 10,
     saida: 5,
-    total: (unidadesAdquiridas - saida)
+    controle: (unidadesAdquiridas - saida)
 };
-
-id = json.id;
-const estoque = [json, id];
-
 app.get("/estoque", (req, res, next) => {
-    res.json(estoque);
+    res.json(estoque_ativo);
 });
 app.post("/estoque", (req, res, next) => {
-    const estoque = req.body;
-    estoque.push({id:contador +=1, minimoEstoque:estoque.minimoEstoque,
-        referenciasLojista:estoque.referenciasLojista,
-        produto:estoque.produto, tipo:estoque.tipo, 
-        unidadesAdquiridas:estoque.unidadesAdquiridas,
-        saida:estoque.saida, total:estoque.total
-});
-    console.log(estoque);
+    const estoque_ativo = {
+        
+        id: id+=1,
+        minimoEstoque: req.body.minimoEstoque,
+        referenciasLojista: req.body.referenciasLojista,
+        produto: req.body.produto,
+        tipo: req.body.tipo,
+        unidadesAdquiridas: req.body.unidadesAdquiridas,
+        saida: req.body.saida,
+        total: req.body.total
+    };
+    estoque.push(estoque_ativo)
     res.status(201).json(estoque);
 });
 app.put("/estoque", (req, res, next) => {
-    estoque.forEach((estoque) => {
-        if(estoque.id === req.body.id) {
-            estoque.minimoEstoque = req.body.minimoEstoque;
-            estoque.referenciasLojista = req.body.referenciasLojista;
-            estoque.produto = req.body.produto;
-            estoque.tipo = req.body.tipo;
-            estoque.unidadesAdquiridas = req.body.unidadesAdquiridas;
-            estoque.saida = req.body.saida;
-            estoque.total = req.body.total;
+    estoque.forEach((estoque_ativo) => {
+        if (estoque_ativo.id === req.body.id) {
+            estoque_ativo.minimoEstoque = req.body.minimoEstoque;
+            estoque_ativo.referenciasLojista = req.body.referenciasLojista;
+            estoque_ativo.produto = req.body.produto;
+            estoque_ativo.tipo = req.body.tipo;
+            estoque_ativo.unidadesAdquiridas = req.body.unidadesAdquiridas;
+            estoque_ativo.saida = req.body.saida;
+            estoque_ativo.total = req.body.total;
         }
     })
     res.status(201).json(estoque);
@@ -57,11 +54,10 @@ app.put("/estoque", (req, res, next) => {
 app.delete("/estoque/:id", (req, res, next) => {
     const idReferenciasLojistaDeletado = req.params.id;
     estoque.forEach((estoque, index) => {
-        if(estoque.id == idReferenciasLojistaDeletado) estoque.splice(index);
+        if (estoque_ativo.id == idReferenciasLojistaDeletado) estoque.splice(index,1);
     })
     res.status(201).json(estoque);
 });
-app.set("port", porta);
-const porta = 3000;
-const server = createServer(app);
-server.listen(3000);
+app.listen(3000, () => {
+    console.log("Estoque. Porta 3000.")
+})
